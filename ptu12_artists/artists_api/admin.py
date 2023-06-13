@@ -1,5 +1,4 @@
 from django.contrib import admin
-from models import Band, Song, SongReview, SongReviewComment, SongReviewLike
 from . import models
 
 # Register your models here.
