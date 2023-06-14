@@ -52,4 +52,37 @@ class SongReviewDetail(generics.RetrieveUpdateDestroyAPIView):
             raise ValidationError(_("You have no rights to delete this."))
 
 
+class SongReviewCommentList(generics.ListCreateAPIView):
+    # queryset = models.SongReviewComment.objects.all()
+    serializer_class = serializers.SongReviewCommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def perform_create(self, serializer):
+        song_review = models.SongReview.objects.get(pk=self.kwargs["post_pk"])
+        serializer.save(user=self.request.user, song_review=song_review)
+
+    def get_queryset(self):
+        song_review = models.SongReview.objects.get(pk=self.kwargs["post_pk"])
+        return models.SongReviewComment.objects.filter(song_review=song_review)
+
+
+class SongReviewCommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.SongReviewComment.objects.all()
+    serializer_class = serializers.SongReviewCommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def put(self, request, *args, **kwargs):
+        try:
+            comment = models.SongReviewComment.objects.get(pk=kwargs["pk"], user=request.user)
+        except Exception as e:
+            raise ValidationError(_(f"You cannot update this. Error: {e}"))
+        else:
+            return self.update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        try:
+            comment = models.SongReviewComment.objects.get(pk=kwargs["pk"], user=request.user)
+        except Exception as e:
+            raise ValidationError(_(f"You cannot delete this. Error: {e}"))
+        else:
+            return self.destroy(request, *args, **kwargs)

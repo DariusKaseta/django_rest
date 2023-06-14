@@ -9,7 +9,7 @@ conn = http.client.HTTPConnection("localhost", 8000)
 headers_list = {
  "Accept": "*/*",
  "User-Agent": "Thunder Client (https://www.thunderclient.com)",
- "Authorization": "Basic bmV3dXNlcmhlcmU6bWFub25hdWphc3Bhc3MxMjM=",
+#  "Authorization": "Basic bmV3dXNlcmhlcmU6bWFub25hdWphc3Bhc3MxMjM=",
  "Content-Type": "multipart/form-data; boundary=kljmyvW1ndjXaOEAg4vPm6RBUqO6MC5A" 
 }
 
