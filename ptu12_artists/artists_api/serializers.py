@@ -14,9 +14,16 @@ class SongReviewCommentSerializer(serializers.ModelSerializer):
 class SongReviewSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.username")
     user_id = serializers.ReadOnlyField(source="user.id")
+    comments = SongReviewCommentSerializer(many=True, read_only=True)
+    # comments = serializers.StringRelatedField(many=True, read_only=True)
+    comment_count = serializers.SerializerMethodField()
+
+    def get_comment_count(self, obj):
+        return models.SongReviewComment.objects.filter(song_review=obj).count()
+    
     class Meta:
         model = models.SongReview
-        fields = ["id", "user_id", "user", "song", "content", "score"]
+        fields = ["id", "user_id", "user", "song", "content", "score", "comments", "comment_count"]
 
 
 # class SongReviewCommentSerializer(serializers.ModelSerializer):
